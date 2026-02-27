@@ -166,6 +166,10 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
       <input type="number" id="mesi" value="60" min="6" max="120" oninput="calcola()">
     </div>
     <div>
+      <label class="flabel">Spese istruttoria (max &euro;500)</label>
+      <input type="number" id="istruttoria" value="0" min="0" max="500" step="10" oninput="calcola()">
+    </div>
+    <div>
       <label class="flabel">Gross-up</label>
       <label class="gw" for="gu">
         <div class="tog"><input type="checkbox" id="gu" onchange="calcola()"><span class="sld"></span></div>
@@ -191,6 +195,8 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     <div class="reff-row"><span class="reff-lbl">Rata effettiva (+&euro;4)</span><span class="reff-val" id="reff_s">&mdash;</span></div>
     <div class="pbox"><span class="pbox-lbl">1&ordf; rata (rata+&euro;4+&euro;16)</span><span class="pbox-val" id="p1_s">&mdash;</span></div>
     <div class="div"></div>
+    <div class="row"><span class="row-l">Importo richiesto</span><span class="row-v dim" id="imp_orig_s">&mdash;</span></div>
+    <div class="row"><span class="row-l">Spese istruttoria</span><span class="row-v dim" id="istr_s">&mdash;</span></div>
     <div class="row"><span class="row-l">Importo finanziato</span><span class="row-v neu" id="imp_s">&mdash;</span></div>
     <div class="row"><span class="row-l">Monte interessi</span><span class="row-v dim" id="int_s">&mdash;</span></div>
     <div class="tbox">
@@ -216,6 +222,8 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     <div class="reff-row"><span class="reff-lbl">Rata effettiva (+&euro;4)</span><span class="reff-val" id="reff_a">&mdash;</span></div>
     <div class="pbox"><span class="pbox-lbl">1&ordf; rata (rata+&euro;4+&euro;16)</span><span class="pbox-val" id="p1_a">&mdash;</span></div>
     <div class="div"></div>
+    <div class="row"><span class="row-l">Importo richiesto</span><span class="row-v dim" id="imp_orig_a">&mdash;</span></div>
+    <div class="row"><span class="row-l">Spese istruttoria</span><span class="row-v dim" id="istr_a">&mdash;</span></div>
     <div class="row"><span class="row-l">Importo finanziato</span><span class="row-v neu" id="imp_a">&mdash;</span></div>
     <div class="row"><span class="row-l">Interessi cliente</span><span class="row-v neu" id="int_a">&mdash;</span></div>
     <div class="row"><span class="row-l">Contributo dealer</span><span class="row-v neg" id="con_a">&mdash;</span></div>
@@ -243,6 +251,8 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     <div class="reff-row"><span class="reff-lbl">Rata effettiva (+&euro;4)</span><span class="reff-val" id="reff_z">&mdash;</span></div>
     <div class="pbox"><span class="pbox-lbl">1&ordf; rata (rata+&euro;4+&euro;16)</span><span class="pbox-val" id="p1_z">&mdash;</span></div>
     <div class="div"></div>
+    <div class="row"><span class="row-l">Importo richiesto</span><span class="row-v dim" id="imp_orig_z">&mdash;</span></div>
+    <div class="row"><span class="row-l">Spese istruttoria</span><span class="row-v dim" id="istr_z">&mdash;</span></div>
     <div class="row"><span class="row-l">Importo finanziato</span><span class="row-v neu" id="imp_z">&mdash;</span></div>
     <div class="row"><span class="row-l">Interessi cliente</span><span class="row-v dim">&euro;&nbsp;0,00</span></div>
     <div class="row"><span class="row-l">Contributo dealer</span><span class="row-v neg" id="con_z">&mdash;</span></div>
@@ -317,7 +327,8 @@ function aggiornaPageAlert(violazioni){
   }
 }
 
-function setCard(px,P,imp,rata,n,extra){
+function setCard(px,P,imp,rata,n,extra,extra_istr){
+  extra_istr=extra_istr||0;
   var rEff=rata+SPESE, p1=rata+SPESE+ONERI_1A;
   var anni=Math.ceil(n/12);
   var tot=rEff*n+BOLLO_C+BOLLO_R*anni;
@@ -327,6 +338,8 @@ function setCard(px,P,imp,rata,n,extra){
   document.getElementById("reff2_"+px).textContent=fp(rEff);
   document.getElementById("taeg_"+px).textContent =fp(taeg);
   document.getElementById("p1_"+px).textContent   =f(p1);
+  document.getElementById("imp_orig_"+px).textContent=f(imp-extra_istr);
+  document.getElementById("istr_"+px).textContent  =extra_istr>0?f(extra_istr):"€ 0,00";
   document.getElementById("imp_"+px).textContent  =f(imp);
   document.getElementById("nm_"+px).textContent   =n;
   document.getElementById("anni_"+px).textContent =anni;
@@ -351,6 +364,8 @@ function calcola(){
   var n=parseInt(document.getElementById("mesi").value)||1;
   if(n>120) n=120;
   var gu=document.getElementById("gu").checked;
+  var istr=Math.min(parseFloat(document.getElementById("istruttoria").value)||0,500);
+  P=P+istr;
   var tanA=TAN_BASE/2;
   var sog=getSoglia(P);
 
@@ -361,7 +376,7 @@ function calcola(){
 
   // STANDARD
   var rS=Math.ceil(pmt(P,TAN_BASE,n));
-  var tS=setCard("s",P,P,rS,n,{int:rS*n-P});
+  var tS=setCard("s",P,P,rS,n,{int:rS*n-P},istr);
   setUsura("card_s",tS,sog);
   if(tS>sog) violazioni.push("Standard (TAEG "+fp(tS)+"%)");
 
@@ -370,7 +385,7 @@ function calcola(){
   var impZ,rZ,cZ,netZ;
   if(gu){impZ=P+cZ0;rZ=cm(impZ/n);cZ=cZ0;netZ=P;}
   else  {impZ=P;rZ=cm(rZ0);cZ=cZ0;netZ=P-cZ0;}
-  var tZ=setCard("z",impZ,impZ,rZ,n,{con:cZ,net:netZ});
+  var tZ=setCard("z",impZ,impZ,rZ,n,{con:cZ,net:netZ},istr);
   setUsura("card_z",tZ,sog);
   if(tZ>sog) violazioni.push("Tasso Zero (TAEG "+fp(tZ)+"%)");
 
@@ -379,7 +394,7 @@ function calcola(){
   var impA,rA,iA,cA,netA;
   if(gu){impA=P+cA0;rA=cm(pmt(impA,tanA,n));iA=Math.max(0,rA*n-impA);cA=cA0;netA=P;}
   else  {impA=P;rA=cm(rA0);iA=Math.max(0,rA*n-impA);cA=cA0;netA=P-cA0;}
-  var tA=setCard("a",impA,impA,rA,n,{int:iA,con:cA,net:netA,tan:tanA});
+  var tA=setCard("a",impA,impA,rA,n,{int:iA,con:cA,net:netA,tan:tanA},istr);
   setUsura("card_a",tA,sog);
   if(tA>sog) violazioni.push("Agevolato (TAEG "+fp(tA)+"%)");
 

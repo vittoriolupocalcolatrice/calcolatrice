@@ -221,7 +221,7 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
 
   <div class="card card-dealer">
     <div class="card-title">Provvigione Dealer</div>
-    <div class="big-label">Provvigione totale</div>
+    <div class="big-label">Provvigione su delta interessi</div>
     <div class="big-val" id="prov_tot">&euro;&nbsp;&mdash;</div>
     <div class="div"></div>
     <div class="row"><span class="row-l">Tasso base</span><span class="row-v dim">7,49%</span></div>
@@ -234,9 +234,8 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     <div class="prov-box">
       <div class="prov-box-title">Dettaglio provvigione</div>
       <div class="prov-tr"><span class="prov-tr-l">100% su delta interessi</span><span class="prov-tr-v" id="prov_delta">&mdash;</span></div>
-      <div class="prov-tr"><span class="prov-tr-l">Spese istruttoria</span><span class="prov-tr-v" id="prov_istr">&mdash;</span></div>
       <div class="prov-sep"></div>
-      <div class="prov-tf"><span class="prov-tf-l">Totale provvigione</span><span class="prov-tf-v" id="prov_tot2">&mdash;</span></div>
+      <div class="prov-tr" style="margin-top:.3rem"><span class="prov-tr-l" style="color:var(--gold)">Spese istruttoria (fattura dealer)</span><span class="prov-tr-v" style="color:var(--gold);font-weight:700" id="prov_istr">&mdash;</span></div>
     </div>
   </div>
 
@@ -307,20 +306,22 @@ function calcola() {
   var tApp=parseFloat(document.getElementById("tanApp").value)||TAN_BASE;
   var istr=Math.min(parseFloat(document.getElementById("istruttoria").value)||0,500);
   var anni=Math.ceil(n/12);
-  var sog=getSoglia(P);
 
-  var rata   =Math.ceil(pmt(P,tApp,n));
-  var intApp =rata*n-P;
+  // Importo finanziato = importo richiesto + spese istruttoria
+  var PF = P + istr;
+  var sog=getSoglia(PF);
+
+  var rata   =Math.ceil(pmt(PF,tApp,n));
+  var intApp =rata*n-PF;
   var rEff   =rata+SPESE;
   var p1     =rata+SPESE+ONERI_1A;
   var tot    =rEff*n+BOLLO_C+BOLLO_R*anni;
-  var taeg   =calcolaTAEG(P,rata,istr,n);
+  var taeg   =calcolaTAEG(PF,rata,0,n);
 
-  var rataBase=Math.ceil(pmt(P,TAN_BASE,n));
-  var intBase =rataBase*n-P;
+  var rataBase=Math.ceil(pmt(PF,TAN_BASE,n));
+  var intBase =rataBase*n-PF;
   var deltaInt=intApp-intBase;
   var provDelta=deltaInt*1.00;
-  var provTot =provDelta+istr;
   var delta   =Math.round((tApp-TAN_BASE)*100)/100;
 
   // cliente
@@ -330,7 +331,7 @@ function calcola() {
   document.getElementById("reff_cli").textContent =f(rEff);
   document.getElementById("reff2_cli").textContent=fp(rEff);
   document.getElementById("p1_cli").textContent   =f(p1);
-  document.getElementById("imp_cli").textContent  =f(P);
+  document.getElementById("imp_cli").textContent  =f(PF);
   document.getElementById("int_cli").textContent  =f(intApp);
   document.getElementById("istr_cli").textContent =istr>0?f(istr):"€ 0,00";
   document.getElementById("nm_cli").textContent   =n;
@@ -347,8 +348,8 @@ function calcola() {
   document.getElementById("delta_int").textContent=f(deltaInt);
   document.getElementById("prov_delta").textContent=f(provDelta);
   document.getElementById("prov_istr").textContent=f(istr);
-  document.getElementById("prov_tot").textContent =f(provTot);
-  document.getElementById("prov_tot2").textContent=f(provTot);
+  document.getElementById("prov_tot").textContent =f(provDelta);
+
 
   // usura
   var card=document.getElementById("card_cli"), ban=document.getElementById("ub_cli");
