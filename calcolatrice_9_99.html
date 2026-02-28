@@ -27,16 +27,16 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .badge strong{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--acc);line-height:1.1}
 
 /* soglia panel — aperto di default */
-.soglia-panel{background:var(--surf);border:1px solid var(--brd);border-radius:12px;padding:1.1rem;margin-bottom:1.25rem}
+.soglia-panel{background:var(--surf);border:1px solid var(--brd);border-radius:8px;padding:.5rem .75rem;margin-bottom:.75rem}
 .soglia-hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
 .soglia-hdr-title{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
 .soglia-btn{font-size:.6rem;color:var(--acc);background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.25);border-radius:4px;padding:.18rem .5rem;cursor:pointer;white-space:nowrap}
 .soglia-body{margin-top:.9rem}
 .soglia-body.closed{display:none}
-.soglia-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.6rem}
-.si{background:var(--bg);border:1px solid var(--brd);border-radius:8px;padding:.55rem .75rem}
-.si label{font-size:.55rem;color:var(--mut);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3rem;display:block}
-.si input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--brd);padding:.15rem 0;color:var(--acc2);font-family:'DM Mono',monospace;font-size:.95rem;font-weight:500;outline:none}
+.soglia-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem}
+.si{background:var(--bg);border:1px solid var(--brd);border-radius:6px;padding:.3rem .45rem}
+.si label{font-size:.45rem;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.15rem;display:block}
+.si input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--brd);padding:.1rem 0;color:var(--acc2);font-family:'DM Mono',monospace;font-size:.75rem;font-weight:500;outline:none}
 .si input:focus{border-bottom-color:var(--acc2)}
 .snote{font-size:.56rem;color:var(--mut);margin-top:.75rem;line-height:1.7}
 .snote strong{color:var(--acc2)}
@@ -88,11 +88,11 @@ input:checked+.sld::before{transform:translateX(16px);background:var(--acc)}
 .rpill-taeg{background:rgba(0,153,255,.1);color:var(--acc2);border:1px solid rgba(0,153,255,.25)}
 .card.usura .rpill-taeg{background:rgba(239,68,68,.12);color:var(--red);border-color:rgba(239,68,68,.3)}
 .rlabel{font-size:.52rem;color:var(--mut);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.1rem}
-.rval{font-family:'Syne',sans-serif;font-size:1.75rem;font-weight:800;line-height:1;margin-bottom:.3rem}
+.rval{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:500;line-height:1;margin-bottom:.3rem;color:var(--mut)}
 .cs .rval{color:var(--txt)}.ca .rval{color:var(--acc2)}.cz .rval{color:var(--acc)}.card.usura .rval{color:var(--red)}
 .reff-row{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:6px;padding:.35rem .65rem;margin-bottom:.6rem}
 .reff-lbl{font-size:.55rem;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
-.reff-val{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--txt)}
+.reff-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--txt)}
 .card.usura .reff-val{color:var(--red)}
 .pbox{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.22);border-radius:6px;padding:.45rem .75rem;margin-bottom:.75rem;display:flex;justify-content:space-between;align-items:center}
 .pbox-lbl{font-size:.52rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gold)}
@@ -166,16 +166,16 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
       <input type="number" id="mesi" value="60" min="6" max="120" oninput="calcola()">
     </div>
     <div>
-      <label class="flabel">Spese istruttoria (max &euro;500)</label>
-      <input type="number" id="istruttoria" value="0" min="0" max="500" step="10" oninput="calcola()">
-    </div>
-    <div>
       <label class="flabel">Gross-up</label>
       <label class="gw" for="gu">
         <div class="tog"><input type="checkbox" id="gu" onchange="calcola()"><span class="sld"></span></div>
         <div class="gl"><strong>Gross-up</strong>Recupera il contributo nell&apos;importo</div>
       </label>
     </div>
+  </div>
+  <div style="margin-top:.75rem">
+    <label class="flabel">Spese istruttoria (max &euro;500)</label>
+    <input type="number" id="istruttoria" value="0" min="0" max="500" step="10" oninput="calcola()" style="max-width:200px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;padding:.6rem .8rem;color:var(--txt);font-family:'DM Mono',monospace;font-size:.95rem;outline:none">
   </div>
 </div>
 
@@ -185,16 +185,15 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
   <div class="card cs" id="card_s">
     <div class="card-usura-strip">&#9888; Soglia Usura Superata</div>
     <div class="ctitle">Standard</div>
-    <span class="chip chip-s">TAN 9,99%</span>
     <div class="rate-row">
       <span class="rpill rpill-tan">TAN 9,99%</span>
       <span class="rpill rpill-taeg">TAEG <span id="taeg_s">&mdash;</span>%</span>
       <span class="rpill" style="background:rgba(168,85,247,.1);color:var(--purple);border:1px solid rgba(168,85,247,.3)">TAN eff. <span id="taneff_s">&mdash;</span>%</span>
     </div>
-    <div class="rlabel">Rata mensile</div>
+    <div class="reff-row"><span class="reff-lbl">Rata effettiva</span><span class="reff-val" id="reff_s">&mdash;</span></div>
+    <div class="rlabel">Rata mensile (da contratto)</div>
     <div class="rval" id="r_s">&euro;&nbsp;&mdash;</div>
-    <div class="reff-row"><span class="reff-lbl">Rata effettiva (+&euro;4)</span><span class="reff-val" id="reff_s">&mdash;</span></div>
-    <div class="pbox"><span class="pbox-lbl">1&ordf; rata (rata+&euro;4+&euro;16)</span><span class="pbox-val" id="p1_s">&mdash;</span></div>
+    <div class="pbox"><span class="pbox-lbl">1&ordf; rata</span><span class="pbox-val" id="p1_s">&mdash;</span></div>
     <div class="div"></div>
     <div class="row"><span class="row-l">Importo richiesto</span><span class="row-v dim" id="imp_orig_s">&mdash;</span></div>
     <div class="row"><span class="row-l">Spese istruttoria</span><span class="row-v dim" id="istr_s">&mdash;</span></div>
@@ -202,7 +201,8 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     <div class="row"><span class="row-l">Monte interessi</span><span class="row-v dim" id="int_s">&mdash;</span></div>
     <div class="tbox">
       <div class="tbox-title">Totale dovuto consumatore</div>
-      <div class="tr"><span class="tr-l">Rate effettive (&euro;<span id="reff2_s">&mdash;</span> &times; <span id="nm_s">&mdash;</span>)</span><span class="tr-v" id="rc_s">&mdash;</span></div>
+      <div class="tr"><span class="tr-l">Rata mensile &times; <span id="nm_s">&mdash;</span> mesi</span><span class="tr-v" id="rc_s">&mdash;</span></div>
+      <div class="tr"><span class="tr-l">Sp. inc. rata (&euro;4 &times; <span id="nm2_s">&mdash;</span> mesi)</span><span class="tr-v" id="inc_s">&mdash;</span></div>
       <div class="tr"><span class="tr-l">Bollo contratto</span><span class="tr-v">&euro;&nbsp;16,00</span></div>
       <div class="tr"><span class="tr-l">Bollo rendiconto (&euro;2 &times; <span id="anni_s">&mdash;</span> anni)</span><span class="tr-v" id="br_s">&mdash;</span></div>
       <div class="tsep"></div>
@@ -213,16 +213,15 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
   <div class="card ca" id="card_a">
     <div class="card-usura-strip">&#9888; Soglia Usura Superata</div>
     <div class="ctitle">Agevolato 55/45 <span class="gbadge" id="gb_a">gross-up</span></div>
-    <span class="chip chip-a">TAN <span id="tan_a">&mdash;</span>%</span>
     <div class="rate-row">
       <span class="rpill rpill-tan">TAN <span id="tan_a2">&mdash;</span>%</span>
       <span class="rpill rpill-taeg">TAEG <span id="taeg_a">&mdash;</span>%</span>
       <span class="rpill" style="background:rgba(168,85,247,.1);color:var(--purple);border:1px solid rgba(168,85,247,.3)">TAN eff. <span id="taneff_a">&mdash;</span>%</span>
     </div>
-    <div class="rlabel">Rata mensile cliente</div>
+    <div class="reff-row"><span class="reff-lbl">Rata effettiva</span><span class="reff-val" id="reff_a">&mdash;</span></div>
+    <div class="rlabel">Rata mensile (da contratto)</div>
     <div class="rval" id="r_a">&euro;&nbsp;&mdash;</div>
-    <div class="reff-row"><span class="reff-lbl">Rata effettiva (+&euro;4)</span><span class="reff-val" id="reff_a">&mdash;</span></div>
-    <div class="pbox"><span class="pbox-lbl">1&ordf; rata (rata+&euro;4+&euro;16)</span><span class="pbox-val" id="p1_a">&mdash;</span></div>
+    <div class="pbox"><span class="pbox-lbl">1&ordf; rata</span><span class="pbox-val" id="p1_a">&mdash;</span></div>
     <div class="div"></div>
     <div class="row"><span class="row-l">Importo richiesto</span><span class="row-v dim" id="imp_orig_a">&mdash;</span></div>
     <div class="row"><span class="row-l">Spese istruttoria</span><span class="row-v dim" id="istr_a">&mdash;</span></div>
@@ -232,7 +231,8 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     <div class="netbox"><span class="net-l">Netto dealer</span><span class="net-v" id="net_a">&mdash;</span></div>
     <div class="tbox">
       <div class="tbox-title">Totale dovuto consumatore</div>
-      <div class="tr"><span class="tr-l">Rate effettive (&euro;<span id="reff2_a">&mdash;</span> &times; <span id="nm_a">&mdash;</span>)</span><span class="tr-v" id="rc_a">&mdash;</span></div>
+      <div class="tr"><span class="tr-l">Rata mensile &times; <span id="nm_a">&mdash;</span> mesi</span><span class="tr-v" id="rc_a">&mdash;</span></div>
+      <div class="tr"><span class="tr-l">Sp. inc. rata (&euro;4 &times; <span id="nm2_a">&mdash;</span> mesi)</span><span class="tr-v" id="inc_a">&mdash;</span></div>
       <div class="tr"><span class="tr-l">Bollo contratto</span><span class="tr-v">&euro;&nbsp;16,00</span></div>
       <div class="tr"><span class="tr-l">Bollo rendiconto (&euro;2 &times; <span id="anni_a">&mdash;</span> anni)</span><span class="tr-v" id="br_a">&mdash;</span></div>
       <div class="tsep"></div>
@@ -243,16 +243,15 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
   <div class="card cz" id="card_z">
     <div class="card-usura-strip">&#9888; Soglia Usura Superata</div>
     <div class="ctitle">Tasso Zero <span class="gbadge" id="gb_z">gross-up</span></div>
-    <span class="chip chip-z">TAN 0%</span>
     <div class="rate-row">
       <span class="rpill rpill-tan">TAN 0%</span>
       <span class="rpill rpill-taeg">TAEG <span id="taeg_z">&mdash;</span>%</span>
       <span class="rpill" style="background:rgba(168,85,247,.1);color:var(--purple);border:1px solid rgba(168,85,247,.3)">TAN eff. <span id="taneff_z">&mdash;</span>%</span>
     </div>
-    <div class="rlabel">Rata mensile cliente</div>
+    <div class="reff-row"><span class="reff-lbl">Rata effettiva</span><span class="reff-val" id="reff_z">&mdash;</span></div>
+    <div class="rlabel">Rata mensile (da contratto)</div>
     <div class="rval" id="r_z">&euro;&nbsp;&mdash;</div>
-    <div class="reff-row"><span class="reff-lbl">Rata effettiva (+&euro;4)</span><span class="reff-val" id="reff_z">&mdash;</span></div>
-    <div class="pbox"><span class="pbox-lbl">1&ordf; rata (rata+&euro;4+&euro;16)</span><span class="pbox-val" id="p1_z">&mdash;</span></div>
+    <div class="pbox"><span class="pbox-lbl">1&ordf; rata</span><span class="pbox-val" id="p1_z">&mdash;</span></div>
     <div class="div"></div>
     <div class="row"><span class="row-l">Importo richiesto</span><span class="row-v dim" id="imp_orig_z">&mdash;</span></div>
     <div class="row"><span class="row-l">Spese istruttoria</span><span class="row-v dim" id="istr_z">&mdash;</span></div>
@@ -262,7 +261,8 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     <div class="netbox"><span class="net-l">Netto dealer</span><span class="net-v" id="net_z">&mdash;</span></div>
     <div class="tbox">
       <div class="tbox-title">Totale dovuto consumatore</div>
-      <div class="tr"><span class="tr-l">Rate effettive (&euro;<span id="reff2_z">&mdash;</span> &times; <span id="nm_z">&mdash;</span>)</span><span class="tr-v" id="rc_z">&mdash;</span></div>
+      <div class="tr"><span class="tr-l">Rata mensile &times; <span id="nm_z">&mdash;</span> mesi</span><span class="tr-v" id="rc_z">&mdash;</span></div>
+      <div class="tr"><span class="tr-l">Sp. inc. rata (&euro;4 &times; <span id="nm2_z">&mdash;</span> mesi)</span><span class="tr-v" id="inc_z">&mdash;</span></div>
       <div class="tr"><span class="tr-l">Bollo contratto</span><span class="tr-v">&euro;&nbsp;16,00</span></div>
       <div class="tr"><span class="tr-l">Bollo rendiconto (&euro;2 &times; <span id="anni_z">&mdash;</span> anni)</span><span class="tr-v" id="br_z">&mdash;</span></div>
       <div class="tsep"></div>
@@ -338,13 +338,14 @@ function setCard(px,P,imp,rata,n,extra,extra_istr){
   var taeg=calcolaTAEG(imp,rata,n);
   document.getElementById("r_"+px).textContent    =f(rata);
   document.getElementById("reff_"+px).textContent =f(rEff);
-  document.getElementById("reff2_"+px).textContent=fp(rEff);
   document.getElementById("taeg_"+px).textContent =fp(taeg);
   document.getElementById("p1_"+px).textContent   =f(p1);
   document.getElementById("imp_orig_"+px).textContent=f(imp-extra_istr);
   document.getElementById("istr_"+px).textContent  =extra_istr>0?f(extra_istr):"€ 0,00";
   document.getElementById("imp_"+px).textContent  =f(imp);
   document.getElementById("nm_"+px).textContent   =n;
+  document.getElementById("nm2_"+px).textContent  =n;
+  document.getElementById("inc_"+px).textContent  =f(SPESE*n);
   document.getElementById("anni_"+px).textContent =anni;
   document.getElementById("rc_"+px).textContent   =f(rEff*n);
   document.getElementById("br_"+px).textContent   =f(BOLLO_R*anni);
@@ -354,8 +355,10 @@ function setCard(px,P,imp,rata,n,extra,extra_istr){
     if(extra.con!==undefined) document.getElementById("con_"+px).textContent=f(extra.con);
     if(extra.net!==undefined) document.getElementById("net_"+px).textContent=f(extra.net);
     if(extra.tan!==undefined){
-      document.getElementById("tan_"+px).textContent=fp(extra.tan);
-      document.getElementById("tan_"+px+"2").textContent=fp(extra.tan);
+      var elTan=document.getElementById("tan_"+px);
+      if(elTan) elTan.textContent=fp(extra.tan);
+      var elTan2=document.getElementById("tan_"+px+"2");
+      if(elTan2) elTan2.textContent=fp(extra.tan);
     }
   }
   var te=tanEff(imp,rata,n);
