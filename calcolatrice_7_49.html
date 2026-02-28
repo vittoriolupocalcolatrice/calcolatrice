@@ -189,6 +189,7 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     <div class="rate-row">
       <span class="rpill rpill-tan">TAN 7,49%</span>
       <span class="rpill rpill-taeg">TAEG <span id="taeg_s">&mdash;</span>%</span>
+      <span class="rpill" style="background:rgba(168,85,247,.1);color:var(--purple);border:1px solid rgba(168,85,247,.3)">TAN eff. <span id="taneff_s">&mdash;</span>%</span>
     </div>
     <div class="rlabel">Rata mensile</div>
     <div class="rval" id="r_s">&euro;&nbsp;&mdash;</div>
@@ -216,6 +217,7 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     <div class="rate-row">
       <span class="rpill rpill-tan">TAN <span id="tan_a2">&mdash;</span>%</span>
       <span class="rpill rpill-taeg">TAEG <span id="taeg_a">&mdash;</span>%</span>
+      <span class="rpill" style="background:rgba(168,85,247,.1);color:var(--purple);border:1px solid rgba(168,85,247,.3)">TAN eff. <span id="taneff_a">&mdash;</span>%</span>
     </div>
     <div class="rlabel">Rata mensile cliente</div>
     <div class="rval" id="r_a">&euro;&nbsp;&mdash;</div>
@@ -245,6 +247,7 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     <div class="rate-row">
       <span class="rpill rpill-tan">TAN 0%</span>
       <span class="rpill rpill-taeg">TAEG <span id="taeg_z">&mdash;</span>%</span>
+      <span class="rpill" style="background:rgba(168,85,247,.1);color:var(--purple);border:1px solid rgba(168,85,247,.3)">TAN eff. <span id="taneff_z">&mdash;</span>%</span>
     </div>
     <div class="rlabel">Rata mensile cliente</div>
     <div class="rval" id="r_z">&euro;&nbsp;&mdash;</div>
@@ -355,7 +358,19 @@ function setCard(px,P,imp,rata,n,extra,extra_istr){
       document.getElementById("tan_"+px+"2").textContent=fp(extra.tan);
     }
   }
+  var te=tanEff(imp,rata,n);
+  document.getElementById("taneff_"+px).textContent=fp(te);
   return taeg;
+}
+
+function tanEff(P, rata, n) {
+  var lo=0.000001, hi=2.0;
+  for(var i=0;i<200;i++) {
+    var mid=(lo+hi)/2;
+    var pv=rata*(1-Math.pow(1+mid,-n))/mid;
+    if(pv>P) lo=mid; else hi=mid;
+  }
+  return mid*12*100;
 }
 
 function calcola(){
@@ -374,14 +389,19 @@ function calcola(){
 
   var violazioni=[];
 
-  // STANDARD
+  // STANDARD — usa TAN effettivo
   var rS=Math.ceil(pmt(P,TAN_BASE,n));
+  var tanS_eff=tanEff(P,rS,n);
   var tS=setCard("s",P,P,rS,n,{int:rS*n-P},istr);
   setUsura("card_s",tS,sog);
   if(tS>sog) violazioni.push("Standard (TAEG "+fp(tS)+"%)");
 
-  // TASSO ZERO
-  var rZ0=P/n, cZ0=Math.round(P-pvRata(rZ0,n));
+  // TASSO ZERO — rata esatta scontata al TAN NOMINALE (formula banca)
+  var rZ0=P/n;
+  var iNom=TAN_BASE/100/12;
+  var pvZ=0;
+  for(var k=1;k<=n;k++) pvZ+=rZ0/Math.pow(1+iNom,k);
+  var cZ0=Math.round(P-pvZ);
   var impZ,rZ,cZ,netZ;
   if(gu){impZ=P+cZ0;rZ=cm(impZ/n);cZ=cZ0;netZ=P;}
   else  {impZ=P;rZ=cm(rZ0);cZ=cZ0;netZ=P-cZ0;}
@@ -389,12 +409,17 @@ function calcola(){
   setUsura("card_z",tZ,sog);
   if(tZ>sog) violazioni.push("Tasso Zero (TAEG "+fp(tZ)+"%)");
 
-  // AGEVOLATO
-  var rA0=pmt(P,tanA,n), cA0=Math.floor(P-pvRata(rA0,n));
+  // AGEVOLATO — rata arrotondata al mezzo euro scontata al TAN NOMINALE (formula banca)
+  var rA0=pmt(P,tanA,n);
+  var rA_mezzo=Math.ceil(rA0*2)/2;
+  var tanA_eff=tanEff(P,rA_mezzo,n);
+  var pvA=0;
+  for(var k=1;k<=n;k++) pvA+=rA_mezzo/Math.pow(1+iNom,k);
+  var cA0=Math.round(P-pvA);
   var impA,rA,iA,cA,netA;
   if(gu){impA=P+cA0;rA=cm(pmt(impA,tanA,n));iA=Math.max(0,rA*n-impA);cA=cA0;netA=P;}
-  else  {impA=P;rA=cm(rA0);iA=Math.max(0,rA*n-impA);cA=cA0;netA=P-cA0;}
-  var tA=setCard("a",impA,impA,rA,n,{int:iA,con:cA,net:netA,tan:tanA},istr);
+  else  {impA=P;rA=rA_mezzo;iA=Math.max(0,rA*n-P);cA=cA0;netA=P-cA0;}
+  var tA=setCard("a",impA,impA,rA,n,{int:iA,con:cA,net:netA,tan:tanA_eff},istr);
   setUsura("card_a",tA,sog);
   if(tA>sog) violazioni.push("Agevolato (TAEG "+fp(tA)+"%)");
 
