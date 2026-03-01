@@ -160,7 +160,7 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
     </div>
     <div>
       <label class="flabel">Durata (mesi, max 72)</label>
-      <input type="number" id="mesi" value="60" min="6" max="72" oninput="calcola()">
+      <input type="number" id="mesi" value="60" min="6" max="72" oninput="this.value=Math.min(Math.max(parseInt(this.value)||6,6),72);calcola()" onblur="if(parseInt(this.value)>72)this.value=72;if(parseInt(this.value)<6)this.value=6;calcola()">
     </div>
     <div>
       <label class="flabel">Tasso base (fisso)</label>
