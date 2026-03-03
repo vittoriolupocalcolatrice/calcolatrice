@@ -246,7 +246,7 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
 <footer>
   Strumento ad uso interno &mdash; Tasso base fisso 7,49%<br>
   1&ordf; rata = rata + &euro;5 incasso + &euro;16 oneri fiscali &middot; Totale = rate effettive + bollo contratto &euro;16 + bollo rendiconto &euro;2/anno<br>
-  TAEG calcolato dir. UE 2008/48/CE inclusa istruttoria &mdash; I calcoli sono indicativi e soggetti a conferma contrattuale.
+  TAEG calcolato dir. UE 2008/48/CE &mdash; netto erogato senza istruttoria, istruttoria come costo upfront &mdash; I calcoli sono indicativi e soggetti a conferma contrattuale.
 </footer>
 </div>
 
@@ -267,6 +267,8 @@ function pmt(p,tan,n) {
 }
 
 function calcolaTAEG(P,rata,istruttoria,n) {
+  // P = netto erogato al cliente (senza istruttoria)
+  // istruttoria = costo upfront che grava sulla 1ª rata (Dir. UE 2008/48/CE)
   var of=ONERI_1A, r=0.005;
   for(var it=0;it<200;it++) {
     var npv=P-(rata+SPESE+of+istruttoria)/Math.pow(1+r,1);
@@ -329,7 +331,8 @@ function calcola() {
   var rEff     =rata+SPESE;
   var p1       =rata+SPESE+ONERI_1A;
   var tot      =rEff*n+BOLLO_C+BOLLO_R*anni;
-  var taeg     =calcolaTAEG(PF,rata,0,n);
+  // TAEG: netto erogato = P (senza istr), istruttoria come costo upfront 1ª rata
+  var taeg     =calcolaTAEG(P,rata,istr,n);
 
   var rataBase  =pmt(PF,TAN_BASE,n); // esatta non arrotondata
   var tBase_eff =tanEff(PF,Math.ceil(rataBase),n);

@@ -309,6 +309,9 @@ function pvRata(rata,n){
   return pv;
 }
 function calcolaTAEG(P,rata,n){
+  // P = netto erogato al cliente (importo senza istruttoria)
+  // rata calcolata su importo finanziato (include istruttoria)
+  // l'istruttoria abbassa il netto erogato → TAEG più alto (corretto Dir. UE 2008/48/CE)
   var of=ONERI_1A,r=0.005;
   for(var it=0;it<200;it++){
     var npv=P-(rata+SPESE+of)/Math.pow(1+r,1);
@@ -342,12 +345,14 @@ function aggiornaPageAlert(violazioni){
   }
 }
 
-function setCard(px,P,imp,rata,n,extra,extra_istr){
+function setCard(px,P,imp,rata,n,extra,extra_istr,nettoErogato){
   extra_istr=extra_istr||0;
+  // nettoErogato = importo senza istruttoria (per TAEG corretto Dir. UE 2008/48/CE)
+  var netto = (nettoErogato !== undefined) ? nettoErogato : imp;
   var rEff=rata+SPESE, p1=rata+SPESE+ONERI_1A;
   var anni=Math.ceil(n/12);
   var tot=rEff*n+BOLLO_C+BOLLO_R*anni;
-  var taeg=calcolaTAEG(imp,rata,n);
+  var taeg=calcolaTAEG(netto,rata,n);
   document.getElementById("r_"+px).textContent    =f(rata);
   document.getElementById("reff_"+px).textContent =f(rEff);
   document.getElementById("taeg_"+px).textContent =fp(taeg);
@@ -399,7 +404,8 @@ function calcola(){
   if(n>120) n=120;
   var gu=document.getElementById("gu").checked;
   var istr=Math.min(Math.max(parseFloat(document.getElementById("istruttoria").value)||0,0),500);document.getElementById("istruttoria").value=istr;
-  P=P+istr;
+  var P_netto=P; // netto erogato al cliente (senza istruttoria) — usato per TAEG
+  P=P+istr;      // importo finanziato (con istruttoria) — usato per calcolo rate
   var tanA=TAN_BASE/2;
   var sog=getSoglia(P);
 
@@ -411,7 +417,7 @@ function calcola(){
   // STANDARD — usa TAN effettivo
   var rS=Math.ceil(pmt(P,TAN_BASE,n));
   var tanS_eff=tanEff(P,rS,n);
-  var tS=setCard("s",P,P,rS,n,{int:rS*n-P},istr);
+  var tS=setCard("s",P,P,rS,n,{int:rS*n-P},istr,P_netto);
   setUsura("card_s",tS,sog);
   if(tS>sog) violazioni.push("Standard (TAEG "+fp(tS)+"%)");
 
@@ -424,7 +430,7 @@ function calcola(){
   var impZ,rZ,cZ,netZ;
   if(gu){impZ=P+cZ0;rZ=cm(impZ/n);cZ=cZ0;netZ=P;}
   else  {impZ=P;rZ=cm(rZ0);cZ=cZ0;netZ=P-cZ0;}
-  var tZ=setCard("z",impZ,impZ,rZ,n,{con:cZ,net:netZ},istr);
+  var tZ=setCard("z",impZ,impZ,rZ,n,{con:cZ,net:netZ},istr,P_netto);
   setUsura("card_z",tZ,sog);
   if(tZ>sog) violazioni.push("Tasso Zero (TAEG "+fp(tZ)+"%)");
 
@@ -438,7 +444,7 @@ function calcola(){
   var impA,rA,iA,cA,netA;
   if(gu){impA=P+cA0;rA=cm(pmt(impA,tanA,n));iA=Math.max(0,rA*n-impA);cA=cA0;netA=P;}
   else  {impA=P;rA=rA_mezzo;iA=Math.max(0,rA*n-P);cA=cA0;netA=P-cA0;}
-  var tA=setCard("a",impA,impA,rA,n,{int:iA,con:cA,net:netA,tan:tanA_eff},istr);
+  var tA=setCard("a",impA,impA,rA,n,{int:iA,con:cA,net:netA,tan:tanA_eff},istr,P_netto);
   setUsura("card_a",tA,sog);
   if(tA>sog) violazioni.push("Agevolato (TAEG "+fp(tA)+"%)");
 
