@@ -103,6 +103,45 @@ select option{background:var(--surf)}
 .taeg-chip{font-size:.58rem;padding:.12rem .4rem;border-radius:4px;background:rgba(0,153,255,.1);color:var(--acc2);border:1px solid rgba(0,153,255,.25);display:inline-block;margin-bottom:.4rem}
 .taeg-chip.usura{background:rgba(239,68,68,.12);color:var(--red);border-color:rgba(239,68,68,.3)}
 footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-align:center;font-size:.56rem;color:var(--mut);line-height:1.9}
+
+/* CVT assicurativa */
+.cvt-panel{background:var(--surf);border:1px solid rgba(168,85,247,.35);border-radius:12px;padding:1.1rem;margin-bottom:1rem}
+.cvt-panel::before{content:'';display:block;height:3px;background:linear-gradient(90deg,var(--purple),#c084fc);margin:-1.1rem -1.1rem 1rem -1.1rem;border-radius:12px 12px 0 0}
+.cvt-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.85rem}
+.cvt-icon{font-size:1rem}
+.cvt-title{font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple)}
+.cvt-toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem}
+.cvt-toggle-lbl{font-size:.6rem;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
+.toggle-switch{position:relative;display:inline-block;width:38px;height:20px}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--brd);border-radius:20px;transition:.3s}
+.toggle-slider:before{position:absolute;content:'';height:14px;width:14px;left:3px;bottom:3px;background:var(--mut);border-radius:50%;transition:.3s}
+input:checked + .toggle-slider{background:rgba(168,85,247,.4);border:1px solid var(--purple)}
+input:checked + .toggle-slider:before{transform:translateX(18px);background:var(--purple)}
+.cvt-body{display:none}
+.cvt-body.on{display:block}
+.cvt-selrow{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.85rem}
+.cvt-polizza-pills{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
+.cvt-polizza-pill{flex:1;padding:.5rem .6rem;text-align:center;border-radius:8px;border:1px solid var(--brd);background:var(--bg);cursor:pointer;font-size:.63rem;font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);transition:all .2s;white-space:nowrap}
+.cvt-polizza-pill.sel-cvt{border-color:var(--purple);background:rgba(168,85,247,.12);color:var(--purple)}
+.cvt-dur-pills{display:flex;gap:.4rem;flex-wrap:wrap}
+.cvt-dur-pill{padding:.32rem .65rem;border-radius:20px;border:1px solid var(--brd);background:var(--bg);font-size:.62rem;font-family:'DM Mono',monospace;color:var(--mut);cursor:pointer;transition:all .2s}
+.cvt-dur-pill.sel-cdur{border-color:var(--purple);background:rgba(168,85,247,.1);color:var(--purple)}
+.cvt-result{background:var(--bg);border:1px solid rgba(168,85,247,.25);border-radius:8px;padding:.75rem;margin-top:.75rem}
+.cvt-res-row{display:flex;justify-content:space-between;align-items:baseline;font-size:.65rem;margin-bottom:.32rem;gap:.3rem}
+.cvt-res-l{color:var(--mut);font-size:.62rem}
+.cvt-res-v{font-weight:500;text-align:right;color:var(--txt)}
+.cvt-premio-box{background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.25);border-radius:6px;padding:.5rem .75rem;display:flex;justify-content:space-between;align-items:center;margin-top:.6rem}
+.cvt-prem-lbl{font-size:.52rem;text-transform:uppercase;letter-spacing:.1em;color:var(--purple);font-family:'Syne',sans-serif}
+.cvt-prem-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--purple)}
+.cvt-prem-detail{font-size:.52rem;color:var(--mut);margin-top:.1rem;text-align:right}
+.cvt-ristorno-box{background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.25);border-radius:6px;padding:.5rem .75rem;display:flex;justify-content:space-between;align-items:center;margin-top:.45rem}
+.cvt-rist-lbl{font-size:.52rem;text-transform:uppercase;letter-spacing:.1em;color:var(--acc);font-family:'Syne',sans-serif}
+.cvt-rist-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--acc)}
+.cvt-rist-detail{font-size:.52rem;color:var(--mut);margin-top:.1rem;text-align:right}
+.cvt-rata-finale-box{background:rgba(0,153,255,.06);border:1px solid rgba(0,153,255,.3);border-radius:6px;padding:.55rem .75rem;display:flex;justify-content:space-between;align-items:center;margin-top:.45rem}
+.cvt-rf-lbl{font-size:.52rem;text-transform:uppercase;letter-spacing:.1em;color:var(--acc2);font-family:'Syne',sans-serif}
+.cvt-rf-val{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--acc2)}
 </style>
 </head>
 <body>
@@ -239,6 +278,60 @@ footer{margin-top:1.75rem;padding-top:1rem;border-top:1px solid var(--brd);text-
   <div class="row"><span class="row-l">Maggiorazione captive</span><span class="row-v gld" id="tz_magg">—</span></div>
   <div class="row"><span class="row-l">Importo finanziato</span><span class="row-v neu" id="tz_impf">—</span></div>
   <div class="row"><span class="row-l">Totale dovuto</span><span class="row-v neu" id="tz_tot">—</span></div>
+</div>
+
+<!-- CVT ASSICURATIVA -->
+<div class="cvt-panel">
+  <div class="cvt-header">
+    <span class="cvt-icon">🛡️</span>
+    <div class="cvt-title">CVT Assicurativa</div>
+  </div>
+  <div class="cvt-toggle-row">
+    <span class="cvt-toggle-lbl">Aggiungi polizza CVT al finanziamento</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="cvtToggle" onchange="toggleCVT()">
+      <span class="toggle-slider"></span>
+    </label>
+  </div>
+  <div class="cvt-body" id="cvtBody">
+    <div class="pill-label" style="font-family:'Syne',sans-serif;font-size:.66rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.45rem">Seleziona Polizza</div>
+    <div class="cvt-polizza-pills">
+      <div class="cvt-polizza-pill sel-cvt" id="pill_QMT" onclick="selCVTPol('QMT')">QMT — QUIXA</div>
+      <div class="cvt-polizza-pill" id="pill_MTO" onclick="selCVTPol('MTO')">MTO — UNIPOL</div>
+    </div>
+    <div class="pill-label" style="font-family:'Syne',sans-serif;font-size:.66rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.45rem;margin-top:.75rem">Durata Assicurativa</div>
+    <div class="cvt-dur-pills">
+      <div class="cvt-dur-pill sel-cdur" id="cdur_12" onclick="selCVTDur(12)">12 mesi</div>
+      <div class="cvt-dur-pill" id="cdur_24" onclick="selCVTDur(24)">24 mesi</div>
+      <div class="cvt-dur-pill" id="cdur_36" onclick="selCVTDur(36)">36 mesi</div>
+      <div class="cvt-dur-pill" id="cdur_48" onclick="selCVTDur(48)">48 mesi</div>
+    </div>
+    <div class="cvt-result" id="cvtResult" style="display:none">
+      <div class="cvt-res-row"><span class="cvt-res-l">Valore bene</span><span class="cvt-res-v" id="cvt_valore">—</span></div>
+      <div class="cvt-res-row"><span class="cvt-res-l">Percentuale premio</span><span class="cvt-res-v" id="cvt_perc">—</span></div>
+      <div class="cvt-res-row"><span class="cvt-res-l">Importo finanziato (con CVT)</span><span class="cvt-res-v" id="cvt_impf_cvt">—</span></div>
+      <div class="cvt-res-row" id="cvt_teg_row" style="display:none"><span class="cvt-res-l">TEG con CVT inclusa</span><span class="cvt-res-v" id="cvt_teg_val">—</span></div>
+      <div class="cvt-res-row" id="cvt_soglia_row" style="display:none"><span class="cvt-res-l">Soglia usura applicata</span><span class="cvt-res-v" id="cvt_soglia_val">—</span></div>
+      <div class="cvt-premio-box">
+        <div class="cvt-prem-lbl">Premio assicurativo</div>
+        <div>
+          <div class="cvt-prem-val" id="cvt_premio">—</div>
+          <div class="cvt-prem-detail" id="cvt_premio_detail">finanziato e incluso nella rata</div>
+        </div>
+      </div>
+      <div class="cvt-ristorno-box">
+        <div class="cvt-rist-lbl">Ristorno dealer (32%)</div>
+        <div>
+          <div class="cvt-rist-val" id="cvt_ristorno">—</div>
+          <div class="cvt-rist-detail" id="cvt_rist_detail">—</div>
+        </div>
+      </div>
+      <div class="cvt-rata-finale-box">
+        <div class="cvt-rf-lbl">Rata con CVT inclusa</div>
+        <div class="cvt-rf-val" id="cvt_rata_finale">—</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <footer>
@@ -434,6 +527,129 @@ function calcola(){
     cardTZ.classList.remove('on');
   }
 }
+
+
+// ── CVT ASSICURATIVA ──
+var cvtPolizza = 'QMT';
+var cvtDurata  = 12;
+
+var CVT_RATES = {
+  QMT: { 12: 6.246, 24: 11.305, 36: 15.365, 48: 20.487 },
+  MTO: { 12: 6.575, 24: 11.888, 36: 16.155, 48: 26.695 }
+};
+
+function toggleCVT(){
+  var on = document.getElementById('cvtToggle').checked;
+  document.getElementById('cvtBody').className = 'cvt-body' + (on ? ' on' : '');
+  calcola();
+  calcolaCVT();
+}
+
+function selCVTPol(p){
+  cvtPolizza = p;
+  ['QMT','MTO'].forEach(function(id){
+    document.getElementById('pill_'+id).className = 'cvt-polizza-pill' + (id===p ? ' sel-cvt' : '');
+  });
+  calcolaCVT();
+}
+
+function selCVTDur(d){
+  cvtDurata = d;
+  [12,24,36,48].forEach(function(v){
+    document.getElementById('cdur_'+v).className = 'cvt-dur-pill' + (v===d ? ' sel-cdur' : '');
+  });
+  calcolaCVT();
+}
+
+function calcolaCVT(){
+  var on = document.getElementById('cvtToggle').checked;
+  var res = document.getElementById('cvtResult');
+
+  // Ripristina chip TEG base (senza CVT) prima di tutto
+  var chip = document.getElementById('ct_taeg_chip');
+  if(chip && chip.dataset.base) chip.innerHTML = chip.dataset.base;
+
+  if(!on){ res.style.display='none'; return; }
+
+  var P0   = parseFloat(document.getElementById('importo').value)||0;
+  var n    = parseInt(document.getElementById('mesi').value)||0;
+  var istr = Math.min(parseFloat(document.getElementById('istruttoria').value)||0,500);
+  if(P0<=0 || n<=0){ res.style.display='none'; return; }
+
+  var perc     = CVT_RATES[cvtPolizza][cvtDurata];
+  var premio   = Math.round(P0 * perc / 100 * 100) / 100;
+  var ristorno = Math.round(premio * 0.32 * 100) / 100;
+
+  var rataConCVT = null;
+
+  if(selTan !== null && selTan >= 0){
+    var t = TASSI[selTan];
+    // importo finanziato = valore moto + istruttoria + premio CVT
+    var PF_cvt   = P0 + istr + premio;
+    rataConCVT   = Math.ceil(pmt(PF_cvt, t.tan, n)*100)/100;
+
+    // TEG calcolato sul netto erogato = P0 (cliente non paga premio cash)
+    // rata effettiva = rataConCVT + 5 spese incasso
+    // oneri up-front = istr + premio (entrambi finanziati ma sono costi)
+    var tegCVT   = calcolaTEG(P0, rataConCVT, n, istr + premio);
+    var soglia   = getSoglia(PF_cvt);
+    var isUsura  = tegCVT > soglia;
+
+    // Aggiorna chip TEG nella card TAN con valore CVT incluso
+    if(chip){
+      var chipHTML = '<span class="taeg-chip'+(isUsura?' usura':'')+'">TEG (CVT incl.) '+fp(tegCVT)+'%'+(isUsura?' ⚠ USURA':'')+'</span>';
+      chip.innerHTML = chipHTML;
+    }
+    // Aggiorna alert usura globale
+    var pa = document.getElementById('pageAlert');
+    if(isUsura){
+      pa.classList.add('on');
+      document.getElementById('pageAlertMsg').textContent =
+        ' TAN '+TASSI[selTan].label+' con CVT — TEG '+fp(tegCVT)+'% supera soglia '+fp(soglia)+'%';
+    } else {
+      pa.classList.remove('on');
+    }
+
+    document.getElementById('cvt_rata_finale').textContent = f(rataConCVT) + ' / mese';
+    document.getElementById('cvt_teg_row').style.display   = 'flex';
+    document.getElementById('cvt_teg_val').innerHTML =
+      '<span class="taeg-chip'+(isUsura?' usura':'')+'">TEG '+fp(tegCVT)+'%'+(isUsura?' ⚠ USURA':'')+'</span>';
+    document.getElementById('cvt_soglia_row').style.display = 'flex';
+    document.getElementById('cvt_soglia_val').textContent   = fp(soglia)+'%';
+
+  } else if(selTZ !== null){
+    var list2   = prodotto==='new' ? TZ_NEW : TZ_USED;
+    var tz      = list2[selTZ];
+    var magg    = Math.round(P0*tz.sp/100*100)/100;
+    var PF_tz_cvt = P0 + magg + istr + premio;
+    rataConCVT  = Math.ceil(PF_tz_cvt / tz.rate * 100) / 100;
+    document.getElementById('cvt_rata_finale').textContent = f(rataConCVT) + ' / mese';
+    document.getElementById('cvt_teg_row').style.display   = 'none';
+    document.getElementById('cvt_soglia_row').style.display = 'none';
+  } else {
+    document.getElementById('cvt_rata_finale').textContent  = '— (seleziona tasso)';
+    document.getElementById('cvt_teg_row').style.display    = 'none';
+    document.getElementById('cvt_soglia_row').style.display = 'none';
+  }
+
+  document.getElementById('cvt_valore').textContent      = f(P0);
+  document.getElementById('cvt_perc').textContent        = fp(perc)+'%';
+  document.getElementById('cvt_premio').textContent      = f(premio);
+  document.getElementById('cvt_impf_cvt').textContent    = (selTan!==null && selTan>=0) ? f(P0+istr+premio) : '—';
+  document.getElementById('cvt_ristorno').textContent    = f(ristorno);
+  document.getElementById('cvt_rist_detail').textContent = '32% di '+f(premio);
+  res.style.display = 'block';
+}
+
+// Patch calcola(): salva il chip TEG base e poi aggiorna CVT
+var _calcola_orig = calcola;
+calcola = function(){
+  _calcola_orig();
+  // Salva il chip TEG base prima che CVT lo sovrascriva
+  var chip = document.getElementById('ct_taeg_chip');
+  if(chip) chip.dataset.base = chip.innerHTML;
+  calcolaCVT();
+};
 
 renderPills();
 calcola();
